@@ -1,0 +1,19 @@
+{
+  "name": "olly_scrapping",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "dev": "npx ts-node index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.53.0",
+    "typescript": "^5.8.3"
+  }
+}
