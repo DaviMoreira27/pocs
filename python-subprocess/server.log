@@ -1,0 +1,251 @@
+2025-06-14 17:53:53,562 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['ubuntu:20.04']]
+2025-06-14 17:53:53,564 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 17:53:53,574 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 17:53:53,574 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 17:53:53,575 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 17:53:53,577 - __main__ - INFO - Imagem Docker encontrada: ubuntu:20.04
+2025-06-14 17:53:53,577 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 17:53:53,719 - __main__ - INFO - Contêiner iniciado com sucesso: 322b00aa5b701fe0ff88e0d9a28196470ad5a838f15f15c8f00b385bc0b0601e
+2025-06-14 17:53:55,720 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 17:53:55,720 - __main__ - INFO - Executando comando: pwd
+2025-06-14 17:53:55,782 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:53:55,782 - __main__ - INFO - Saída: /workspace
+
+2025-06-14 17:53:55,782 - __main__ - INFO - Executando comando: ls -la /workspace
+2025-06-14 17:53:55,837 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:53:55,838 - __main__ - INFO - Saída: total 0
+drwxr-xr-x. 3 1000  972 60 Jun 14 20:53 .
+drwxr-xr-x. 1 root root 18 Jun 14 20:53 ..
+drwxr-xr-x. 2 1000  972 80 Jun 14 20:25 programs
+
+2025-06-14 17:53:55,838 - __main__ - INFO - Executando comando: ls -la /workspace/programs
+2025-06-14 17:53:55,887 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:53:55,887 - __main__ - INFO - Saída: total 24
+drwxr-xr-x. 2 1000 972    80 Jun 14 20:25 .
+drwxr-xr-x. 3 1000 972    60 Jun 14 20:53 ..
+-rwxr-xr-x. 1 1000 972 16664 Jun 14 19:41 script
+-rw-r--r--. 1 1000 972    78 Jun 14 19:40 test.c
+
+2025-06-14 17:53:55,887 - __main__ - INFO - Executando comando: cat /workspace/programs/test.c
+2025-06-14 17:53:55,931 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:53:55,931 - __main__ - INFO - Saída: #include <stdio.h>
+
+int main(){
+    printf("Teste messsage");
+    return 0;
+}
+
+2025-06-14 17:53:55,931 - __main__ - INFO - Executando comando: gcc --version
+2025-06-14 17:53:55,966 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:53:55,966 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "gcc": executable file not found in $PATH: unknown
+
+2025-06-14 17:53:55,966 - __main__ - INFO - Executando comando: gcc /workspace/programs/test.c -o /workspace/programs/test
+2025-06-14 17:53:56,004 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:53:56,004 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "gcc": executable file not found in $PATH: unknown
+
+2025-06-14 17:53:56,004 - __main__ - INFO - Executando comando: ./workspace/programs/test
+2025-06-14 17:53:56,036 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:53:56,036 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "./workspace/programs/test": stat ./workspace/programs/test: no such file or directory: unknown
+
+2025-06-14 17:53:56,037 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 17:54:06,047 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 17:54:11,144 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 17:54:11,144 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 17:54:11,160 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 17:56:28,941 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['ubuntu:20.04']]
+2025-06-14 17:56:28,942 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 17:56:28,954 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 17:56:28,955 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 17:56:28,956 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 17:56:28,958 - __main__ - WARNING - Imagem gcc:latest não encontrada, usando ubuntu:20.04
+2025-06-14 17:56:28,958 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 17:56:29,113 - __main__ - INFO - Contêiner iniciado com sucesso: 6975c9a7dc5b0f7de6a8e15dc9834ff7d82f8ed2d814e24cc5dd584086af166e
+2025-06-14 17:56:31,116 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 17:56:31,116 - __main__ - INFO - Executando comando: pwd
+2025-06-14 17:56:31,173 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:56:31,173 - __main__ - INFO - Saída: /workspace
+
+2025-06-14 17:56:31,173 - __main__ - INFO - Executando comando: ls -la /workspace
+2025-06-14 17:56:31,227 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:56:31,228 - __main__ - INFO - Saída: total 0
+drwxr-xr-x. 3 1000  972 60 Jun 14 20:56 .
+drwxr-xr-x. 1 root root 18 Jun 14 20:56 ..
+drwxr-xr-x. 2 1000  972 80 Jun 14 20:25 programs
+
+2025-06-14 17:56:31,228 - __main__ - INFO - Executando comando: ls -la /workspace/programs
+2025-06-14 17:56:31,278 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:56:31,278 - __main__ - INFO - Saída: total 24
+drwxr-xr-x. 2 1000 972    80 Jun 14 20:25 .
+drwxr-xr-x. 3 1000 972    60 Jun 14 20:56 ..
+-rwxr-xr-x. 1 1000 972 16664 Jun 14 19:41 script
+-rw-r--r--. 1 1000 972    78 Jun 14 19:40 test.c
+
+2025-06-14 17:56:31,278 - __main__ - INFO - Executando comando: cat /workspace/programs/test.c
+2025-06-14 17:56:31,328 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 17:56:31,328 - __main__ - INFO - Saída: #include <stdio.h>
+
+int main(){
+    printf("Teste messsage");
+    return 0;
+}
+
+2025-06-14 17:56:31,329 - __main__ - INFO - Executando comando: gcc --version
+2025-06-14 17:56:31,365 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:56:31,365 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "gcc": executable file not found in $PATH: unknown
+
+2025-06-14 17:56:31,365 - __main__ - INFO - Executando comando: gcc /workspace/programs/test.c -o /workspace/programs/test
+2025-06-14 17:56:31,395 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:56:31,395 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "gcc": executable file not found in $PATH: unknown
+
+2025-06-14 17:56:31,395 - __main__ - INFO - Executando comando: ./workspace/programs/test
+2025-06-14 17:56:31,432 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 17:56:31,432 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "./workspace/programs/test": stat ./workspace/programs/test: no such file or directory: unknown
+
+2025-06-14 17:56:31,432 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 17:56:36,093 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 17:56:41,179 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 17:56:41,179 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 17:56:41,190 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 18:00:10,547 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-14 18:00:10,549 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 18:00:10,561 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 18:00:10,561 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 18:00:10,562 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 18:00:10,564 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-14 18:00:10,564 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 18:00:10,703 - __main__ - INFO - Contêiner iniciado com sucesso: f61bba4fe92d7019ca553bdbde98792998f94f60cc4f674c2b81bb0bae4955ab
+2025-06-14 18:00:12,706 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 18:00:12,706 - __main__ - INFO - Executando comando: pwd
+2025-06-14 18:00:12,762 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:12,762 - __main__ - INFO - Saída: /workspace
+
+2025-06-14 18:00:12,763 - __main__ - INFO - Executando comando: ls -la /workspace
+2025-06-14 18:00:12,822 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:12,822 - __main__ - INFO - Saída: total 0
+drwxr-xr-x. 3 1000  972 60 Jun 14 21:00 .
+drwxr-xr-x. 1 root root 18 Jun 14 21:00 ..
+drwxr-xr-x. 2 1000  972 80 Jun 14 20:25 programs
+
+2025-06-14 18:00:12,822 - __main__ - INFO - Executando comando: ls -la /workspace/programs
+2025-06-14 18:00:12,878 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:12,878 - __main__ - INFO - Saída: total 24
+drwxr-xr-x. 2 1000 972    80 Jun 14 20:25 .
+drwxr-xr-x. 3 1000 972    60 Jun 14 21:00 ..
+-rwxr-xr-x. 1 1000 972 16664 Jun 14 19:41 script
+-rw-r--r--. 1 1000 972    78 Jun 14 19:40 test.c
+
+2025-06-14 18:00:12,879 - __main__ - INFO - Executando comando: cat /workspace/programs/test.c
+2025-06-14 18:00:12,931 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:12,931 - __main__ - INFO - Saída: #include <stdio.h>
+
+int main(){
+    printf("Teste messsage");
+    return 0;
+}
+
+2025-06-14 18:00:12,931 - __main__ - INFO - Executando comando: gcc --version
+2025-06-14 18:00:12,976 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:12,976 - __main__ - INFO - Saída: gcc (GCC) 15.1.0
+Copyright (C) 2025 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+2025-06-14 18:00:12,976 - __main__ - INFO - Executando comando: gcc /workspace/programs/test.c -o /workspace/programs/test
+2025-06-14 18:00:13,095 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:00:13,096 - __main__ - INFO - Saída: 
+2025-06-14 18:00:13,096 - __main__ - INFO - Executando comando: ./workspace/programs/test
+2025-06-14 18:00:13,135 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 18:00:13,136 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "./workspace/programs/test": stat ./workspace/programs/test: no such file or directory: unknown
+
+2025-06-14 18:00:13,136 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 18:00:23,146 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 18:00:28,251 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 18:00:28,251 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 18:00:28,268 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 18:03:50,706 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-14 18:03:50,708 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 18:03:50,717 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 18:03:50,717 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 18:03:50,718 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 18:03:50,721 - __main__ - INFO - Imagem Docker encontrada: ubuntu:20.04
+2025-06-14 18:03:50,721 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 18:03:50,867 - __main__ - INFO - Contêiner iniciado com sucesso: 3bdf86275020e8d6dec6548e88fe441de5c17dbf36c239ef7c6ae969c5a8fff1
+2025-06-14 18:03:52,869 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 18:03:52,869 - __main__ - INFO - Executando comando: ./workspace/programs/script
+2025-06-14 18:03:52,912 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 18:03:52,912 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "./workspace/programs/script": stat ./workspace/programs/script: no such file or directory: unknown
+
+2025-06-14 18:03:52,912 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 18:04:02,923 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 18:04:08,022 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 18:04:08,022 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 18:04:08,034 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 18:04:12,287 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-14 18:04:12,290 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 18:04:12,303 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 18:04:12,303 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 18:04:12,304 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 18:04:12,307 - __main__ - INFO - Imagem Docker encontrada: ubuntu:20.04
+2025-06-14 18:04:12,307 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 18:04:12,438 - __main__ - INFO - Contêiner iniciado com sucesso: 1c07f8ece053482f91aeb1fe44d23690c48175b848ef92dc05ac3c23194583b3
+2025-06-14 18:04:14,440 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 18:04:14,440 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-14 18:04:14,496 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:04:14,496 - __main__ - INFO - Saída: script
+test.c
+
+2025-06-14 18:04:14,496 - __main__ - INFO - Executando comando: ./workspace/programs/script
+2025-06-14 18:04:14,536 - __main__ - INFO - Comando executado. Exit code: 127
+2025-06-14 18:04:14,536 - __main__ - INFO - Saída: OCI runtime exec failed: exec failed: unable to start container process: exec: "./workspace/programs/script": stat ./workspace/programs/script: no such file or directory: unknown
+
+2025-06-14 18:04:14,536 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 18:04:24,547 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 18:04:29,633 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 18:04:29,633 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 18:04:29,645 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 18:05:23,873 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-14 18:05:23,876 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 18:05:23,888 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 18:05:23,888 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 18:05:23,889 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 18:05:23,892 - __main__ - INFO - Imagem Docker encontrada: ubuntu:20.04
+2025-06-14 18:05:23,892 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 18:05:24,068 - __main__ - INFO - Contêiner iniciado com sucesso: 8f1dc767587bdf75606abb5916eedb9da24a342df2ad1f238f603b821c5141e5
+2025-06-14 18:05:26,071 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 18:05:26,071 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-14 18:05:26,133 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:05:26,133 - __main__ - INFO - Saída: script
+test.c
+
+2025-06-14 18:05:26,133 - __main__ - INFO - Executando comando: /workspace/programs/script
+2025-06-14 18:05:26,182 - __main__ - INFO - Comando executado. Exit code: 1
+2025-06-14 18:05:26,182 - __main__ - INFO - Saída: /workspace/programs/script: /lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.34' not found (required by /workspace/programs/script)
+
+2025-06-14 18:05:26,182 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 18:05:36,193 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 18:05:41,304 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 18:05:41,305 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 18:05:41,322 - __main__ - INFO - Cleanup de containers concluído
+2025-06-14 18:05:47,128 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-14 18:05:47,131 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-14 18:05:47,139 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-14 18:05:47,140 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-14 18:05:47,140 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-14 18:05:47,143 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-14 18:05:47,143 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-14 18:05:47,301 - __main__ - INFO - Contêiner iniciado com sucesso: ec7f1a783f6f2a987036cd1c190646dc3630188454b046257ce09ac16d84ab77
+2025-06-14 18:05:49,303 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-14 18:05:49,303 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-14 18:05:49,360 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:05:49,360 - __main__ - INFO - Saída: script
+test.c
+
+2025-06-14 18:05:49,361 - __main__ - INFO - Executando comando: /workspace/programs/script
+2025-06-14 18:05:49,410 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-14 18:05:49,411 - __main__ - INFO - Saída: Teste messsage
+2025-06-14 18:05:49,411 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-14 18:05:59,421 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-14 18:06:04,526 - __main__ - INFO - Contêiner parado: user_03
+2025-06-14 18:06:04,526 - __main__ - INFO - Workspace removido: user_03
+2025-06-14 18:06:04,539 - __main__ - INFO - Cleanup de containers concluído
