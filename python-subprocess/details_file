@@ -1,0 +1,6 @@
+[SCHED_OTHER] PID: 87778 CPU TIME: 0.000995 s (User: 0.000000 s, System: 0.000995 s)
+[SCHED_OTHER] All the subprocess are FINALIZED, finishing child process. PID: 87778
+
+[SCHED_OTHER] PID: 87808 CPU TIME: 0.001103 s (User: 0.000000 s, System: 0.001103 s)
+[SCHED_OTHER] All the subprocess are FINALIZED, finishing child process. PID: 87808
+

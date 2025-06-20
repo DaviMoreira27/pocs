@@ -249,3 +249,340 @@ test.c
 2025-06-14 18:06:04,526 - __main__ - INFO - Contêiner parado: user_03
 2025-06-14 18:06:04,526 - __main__ - INFO - Workspace removido: user_03
 2025-06-14 18:06:04,539 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:42:00,049 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:42:00,052 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:42:00,063 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:42:00,064 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:42:00,065 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:42:00,068 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:42:00,068 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:42:00,243 - __main__ - INFO - Contêiner iniciado com sucesso: edd3df5674423cabd2332bd709a802559917308d5cdd19f016c6ba523bf4128a
+2025-06-19 23:42:02,246 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:42:02,246 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:42:02,328 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:42:02,328 - __main__ - INFO - Saída: script
+test.c
+
+2025-06-19 23:42:02,328 - __main__ - INFO - Executando comando: /workspace/programs/script
+2025-06-19 23:42:02,385 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:42:02,385 - __main__ - INFO - Saída: Teste messsage
+2025-06-19 23:42:02,385 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-19 23:42:12,386 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-19 23:42:17,482 - __main__ - INFO - Contêiner parado: user_03
+2025-06-19 23:42:17,482 - __main__ - INFO - Workspace removido: user_03
+2025-06-19 23:42:17,497 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:49:18,516 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:49:18,519 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:49:18,530 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:49:18,530 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:49:18,532 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:49:18,535 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:49:18,536 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:49:18,976 - __main__ - INFO - Contêiner iniciado com sucesso: b8a59ae044d5c6a63c37513fcb2088c9d021dfff91cb69fb84b1c86ac53cec97
+2025-06-19 23:49:20,978 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:49:20,978 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:49:21,041 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:49:21,041 - __main__ - INFO - Saída: ps
+script
+test.c
+
+2025-06-19 23:49:21,042 - __main__ - INFO - Executando comando: /workspace/programs/ps
+2025-06-19 23:50:19,906 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:50:19,906 - __main__ - INFO - Saída: Escalonator Error: Operation not permitted
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 23, PPID = 16, POLICY: SCHED_RR
+Escalonator Error: Operation not permitted
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 24, PPID = 16, POLICY: SCHED_FIFO
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+[SCHED_OTHER] PID: 27 RUNNING...
+[SCHED_OTHER] PID: 27 RUNNING...
+[SCHED_OTHER] PID: 27 RUNNING...
+[SCHED_OTHER] PID: 27 RUNNING...
+[SCHED_OTHER] PID: 27 RUNNING...
+[SCHED_OTHER] PID: 27 FINALIZED.
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+[SCHED_OTHER] PID: 26 RUNNING...
+[SCHED_OTHER] PID: 26 RUNNING...
+[SCHED_OTHER] PID: 26 RUNNING...
+[SCHED_OTHER] PID: 26 RUNNING...
+[SCHED_OTHER] PID: 26 RUNNING...
+[SCHED_OTHER] PID: 26 FINALIZED.
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+[SCHED_OTHER] PID: 28 RUNNING...
+[SCHED_OTHER] PID: 28 RUNNING...
+[SCHED_OTHER] PID: 28 RUNNING...
+[SCHED_OTHER] PID: 28 RUNNING...
+[SCHED_OTHER] PID: 28 RUNNING...
+[SCHED_OTHER] PID: 28 FINALIZED.
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+[SCHED_OTHER] PID: 29 RUNNING...
+[SCHED_OTHER] PID: 29 RUNNING...
+[SCHED_OTHER] PID: 29 RUNNING...
+[SCHED_OTHER] PID: 29 RUNNING...
+[SCHED_OTHER] PID: 29 RUNNING...
+[SCHED_OTHER] PID: 29 FINALIZED.
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+[SCHED_OTHER] PID: 25 RUNNING...
+[SCHED_OTHER] PID: 25 RUNNING...
+[SCHED_OTHER] PID: 25 RUNNING...
+[SCHED_OTHER] PID: 25 RUNNING...
+[SCHED_OTHER] PID: 25 RUNNING...
+[SCHED_OTHER] PID: 25 FINALIZED.
+INITIATED parent process (PID: 16)
+Child process CREATED: PID = 22, PPID = 16, POLICY: SCHED_OTHER
+INITIATED parent process (PID: 16)
+Parent process FINALIZED (PID: 16)
+
+2025-06-19 23:50:19,907 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-19 23:50:29,917 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-19 23:50:35,356 - __main__ - INFO - Contêiner parado: user_03
+2025-06-19 23:50:35,357 - __main__ - INFO - Workspace removido: user_03
+2025-06-19 23:50:35,375 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:52:15,041 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:52:15,044 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:52:15,055 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:52:15,056 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:52:15,058 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:52:15,063 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:52:15,063 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:52:15,491 - __main__ - INFO - Contêiner iniciado com sucesso: 2b7c26bf66f703eaa4453e7aa533adeb172750cc2d9a7f743a9494591cb0ea0c
+2025-06-19 23:52:17,493 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:52:17,494 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:52:17,565 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:52:17,565 - __main__ - INFO - Saída: ps
+script
+st
+test.c
+
+2025-06-19 23:52:17,565 - __main__ - INFO - Executando comando: /workspace/programs/st
+2025-06-19 23:52:17,617 - __main__ - INFO - Comando executado. Exit code: 1
+2025-06-19 23:52:17,617 - __main__ - INFO - Saída: Enter filename: Failed to read filename
+
+2025-06-19 23:52:17,617 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-19 23:52:27,627 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-19 23:52:32,777 - __main__ - INFO - Contêiner parado: user_03
+2025-06-19 23:52:32,778 - __main__ - INFO - Workspace removido: user_03
+2025-06-19 23:52:32,798 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:54:03,480 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:54:03,483 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:54:03,497 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:54:03,497 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:54:03,498 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:54:03,502 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:54:03,502 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:54:03,821 - __main__ - INFO - Contêiner iniciado com sucesso: f2aba05ae9ece34fd8e739b0dc4b6fe3277308d89d6062d39da42f47bff9be34
+2025-06-19 23:54:05,823 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:54:05,823 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:54:05,903 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:54:05,903 - __main__ - INFO - Saída: pc
+ps
+script
+st
+test.c
+
+2025-06-19 23:54:05,903 - __main__ - INFO - Executando comando: /workspace/programs/pc
+2025-06-19 23:54:05,967 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:54:05,967 - __main__ - INFO - Saída: Executed using vfork process
+Executed using vfork process
+Parent process initiated with the PID: 16 
+Hello world! This was called by the parent and fork process, process_id(pid) = 16, in session 0, called by parent process with the id: 0 
+Parent process finalized with the PID: 16 
+Parent process initiated with the PID: 16 
+Hello world! This was called by the parent and fork process, process_id(pid) = 22, in session 0, called by parent process with the id: 16 
+Parent process finalized with the PID: 22 
+total 0
+drwxr-xr-x. 3 1000  972  60 Jun 20 02:54 .
+drwxr-xr-x. 1 root root  18 Jun 20 02:54 ..
+drwxr-xr-x. 2 1000  972 140 Jun 20 02:53 programs
+total 0
+drwxr-xr-x. 3 1000  972  60 Jun 20 02:54 .
+drwxr-xr-x. 1 root root  18 Jun 20 02:54 ..
+drwxr-xr-x. 2 1000  972 140 Jun 20 02:53 programs
+
+2025-06-19 23:54:05,968 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-19 23:54:15,978 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-19 23:54:21,149 - __main__ - INFO - Contêiner parado: user_03
+2025-06-19 23:54:21,150 - __main__ - INFO - Workspace removido: user_03
+2025-06-19 23:54:21,171 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:55:16,288 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:55:16,291 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:55:16,300 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:55:16,301 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:55:16,302 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:55:16,304 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:55:16,304 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:55:16,565 - __main__ - INFO - Contêiner iniciado com sucesso: 584f2134ed0e317a3a6ab9f3486bf5e2b576d18dfde988b059b778cb15ce1a56
+2025-06-19 23:55:18,567 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:55:18,567 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:55:18,632 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:55:18,632 - __main__ - INFO - Saída: pc
+ps
+script
+st
+test.c
+
+2025-06-19 23:55:18,633 - __main__ - INFO - Executando comando: /workspace/programs/pc
+2025-06-19 23:55:18,688 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-19 23:55:18,689 - __main__ - INFO - Saída: Executed using vfork process
+Executed using vfork process
+Parent process initiated with the PID: 16 
+Hello world! This was called by the parent and fork process, process_id(pid) = 16, in session 0, called by parent process with the id: 0 
+Parent process finalized with the PID: 16 
+Parent process initiated with the PID: 16 
+Hello world! This was called by the parent and fork process, process_id(pid) = 22, in session 0, called by parent process with the id: 16 
+Parent process finalized with the PID: 22 
+total 0
+drwxr-xr-x. 3 1000  972  60 Jun 20 02:55 .
+drwxr-xr-x. 1 root root  18 Jun 20 02:55 ..
+drwxr-xr-x. 2 1000  972 140 Jun 20 02:53 programs
+total 0
+drwxr-xr-x. 3 1000  972  60 Jun 20 02:55 .
+drwxr-xr-x. 1 root root  18 Jun 20 02:55 ..
+drwxr-xr-x. 2 1000  972 140 Jun 20 02:53 programs
+
+2025-06-19 23:55:18,689 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-19 23:55:28,699 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-19 23:55:33,928 - __main__ - INFO - Contêiner parado: user_03
+2025-06-19 23:55:33,929 - __main__ - INFO - Workspace removido: user_03
+2025-06-19 23:55:33,948 - __main__ - INFO - Cleanup de containers concluído
+2025-06-19 23:59:51,334 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:59:51,336 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:59:51,350 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:59:51,351 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-19 23:59:51,353 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-19 23:59:51,356 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-19 23:59:51,356 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-19 23:59:51,734 - __main__ - INFO - Contêiner iniciado com sucesso: 8b1ce12a08d5b9311330db16654d54c4460c7d2c6ff309e76e262804c29e6811
+2025-06-19 23:59:53,736 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-19 23:59:53,736 - __main__ - INFO - Executando comando: ls /workspace/programs
+2025-06-19 23:59:53,806 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-19 23:59:53,807 - __main__ - INFO - Executando comando: /workspace/programs/pc
+2025-06-19 23:59:53,883 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-19 23:59:53,884 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:00:03,894 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:00:09,065 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:00:09,066 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:00:09,085 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:07:06,275 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:07:06,278 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:07:06,293 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:07:06,293 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:07:06,296 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:07:06,300 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:07:06,301 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:07:06,688 - __main__ - INFO - Contêiner iniciado com sucesso: b13d530704932ef5309babb508ff023b9469be5c38491d040649f50e37f61738
+2025-06-20 00:07:08,690 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-20 00:07:08,690 - __main__ - INFO - Executando comando: /workspace/programs/pc
+2025-06-20 00:07:08,780 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-20 00:07:08,781 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:07:18,791 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:07:23,944 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:07:23,945 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:07:23,963 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:07:56,634 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:07:56,637 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:07:56,649 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:07:56,650 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:07:56,651 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:07:56,654 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:07:56,654 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:07:56,836 - __main__ - INFO - Contêiner iniciado com sucesso: b79c43a9c0e77df04bdc82a0caf64dc04874412c4ce148dd8be1cc7de81d79d4
+2025-06-20 00:07:58,838 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-20 00:07:58,838 - __main__ - INFO - Executando comando: /workspace/programs/pc
+2025-06-20 00:07:58,917 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-20 00:07:58,917 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:08:08,927 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:08:14,102 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:08:14,103 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:08:14,130 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:09:00,368 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:16'], ['postgres:latest'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:09:00,370 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:09:00,385 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:09:00,385 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:09:00,387 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:09:00,390 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:09:00,391 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:09:00,802 - __main__ - INFO - Contêiner iniciado com sucesso: fbb66736d6c4c99f2a2ed4019a34f4e38e754d4933165c3fcffdfef286174b11
+2025-06-20 00:09:02,804 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-20 00:09:02,804 - __main__ - INFO - Executando comando: /workspace/programs/ps
+2025-06-20 00:10:07,044 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-20 00:10:07,045 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:10:17,055 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:10:22,271 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:10:22,273 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:10:22,288 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:11:01,062 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:11:01,064 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:11:01,077 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:11:01,078 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:11:01,079 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:11:01,083 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:11:01,083 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:11:01,336 - __main__ - INFO - Contêiner iniciado com sucesso: 37935c3ad96c33329f71e99d888f105d3da630c103eaeea93e11d00041c7d287
+2025-06-20 00:11:03,338 - __main__ - INFO - === Iniciando execução de comandos ===
+2025-06-20 00:11:03,338 - __main__ - INFO - Executando comando: /workspace/programs/ps
+2025-06-20 00:11:58,759 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-20 00:11:58,760 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:12:08,770 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:12:13,943 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:12:13,945 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:12:13,966 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:20:08,280 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:20:08,283 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:20:08,292 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:20:08,293 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:20:08,294 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:20:08,297 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:20:08,297 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:20:08,441 - __main__ - INFO - Contêiner iniciado com sucesso: 57314ea3ff08bc7f9be0fe443575e4c420d689ee301b1595a37b7b1a0fa5e570
+2025-06-20 00:20:10,444 - __main__ - INFO - === Testando comando simples ===
+2025-06-20 00:20:10,444 - __main__ - INFO - Executando comando: ls -la /workspace
+2025-06-20 00:20:10,532 - __main__ - INFO - Comando executado. Exit code: None
+2025-06-20 00:20:10,532 - __main__ - INFO - === Testando comando com stdin ===
+2025-06-20 00:20:10,532 - __main__ - INFO - Executando comando interativo: /workspace/programs/ts
+2025-06-20 00:20:10,586 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-20 00:20:10,586 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:20:20,596 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:20:25,707 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:20:25,708 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:20:25,729 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:22:10,529 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:22:10,531 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:22:10,544 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:22:10,545 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:22:10,546 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:22:10,549 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:22:10,549 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:22:10,714 - __main__ - INFO - Contêiner iniciado com sucesso: fa20d46354d4a4d71dda6af22d62f926c0f24a953677b778ea816b7ed99c109c
+2025-06-20 00:22:12,716 - __main__ - INFO - === Testando comando simples ===
+2025-06-20 00:22:12,717 - __main__ - INFO - === Testando comando com stdin ===
+2025-06-20 00:22:12,717 - __main__ - INFO - Executando comando interativo: /workspace/programs/ts
+2025-06-20 00:22:12,773 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-20 00:22:12,774 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:22:22,784 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:22:27,914 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:22:27,915 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:22:27,934 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:22:43,980 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-20 00:22:43,982 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-20 00:22:43,996 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-20 00:22:43,996 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:22:43,998 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:22:44,000 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:22:44,001 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:22:44,179 - __main__ - INFO - Contêiner iniciado com sucesso: 2c46e1f808b30790c6e72e94b6a66b6dc8c697243cfe45bc45d052928b9152ea
+2025-06-20 00:22:46,182 - __main__ - INFO - === Testando comando simples ===
+2025-06-20 00:22:46,182 - __main__ - INFO - === Testando comando com stdin ===
+2025-06-20 00:22:46,182 - __main__ - INFO - Executando comando interativo: /workspace/programs/ts
+2025-06-20 00:22:46,244 - __main__ - INFO - Comando executado. Exit code: 0
+2025-06-20 00:22:46,244 - __main__ - INFO - Monitorando container por 10 segundos...
+2025-06-20 00:22:56,254 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:23:01,349 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:23:01,350 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:23:01,371 - __main__ - INFO - Cleanup de containers concluído

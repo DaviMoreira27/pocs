@@ -1,6 +1,7 @@
 import asyncio
+import threading
 from docker.models.containers import ContainerCollection
-from typing import List
+from typing import List, Optional
 import websockets
 import docker
 from docker import errors as docker_errors
@@ -139,6 +140,90 @@ class IsolatedSubprocessManager:
             await self.cleanup()
             return False
 
+    async def execute_command_interactive(self, command: str, stdin_input: Optional[str] = None):
+        """Executa comando com suporte a stdin usando attach"""
+        if not self.container or not self.running or not self.docker_client:
+            logger.error("Container não está rodando")
+            return None
+
+        try:
+            logger.info(f"Executando comando interativo: {command}")
+
+            # Criar exec com stdin habilitado
+            exec_id = self.docker_client.api.exec_create(
+                self.container.id,
+                command,
+                stdout=True,
+                stderr=True,
+                stdin=True,
+                tty=False,
+                workdir="/workspace"
+            )
+
+            # Iniciar exec e obter socket
+            socket = self.docker_client.api.exec_start(
+                exec_id['Id'],
+                detach=False,
+                tty=False,
+                stream=True,
+                socket=True
+            )
+
+            full_output = []
+
+            # Thread para enviar stdin se fornecido
+            def send_stdin():
+                if stdin_input:
+                    try:
+                        socket._sock.send(stdin_input.encode('utf-8'))
+                        socket._sock.shutdown(1)  # Fechar stdin
+                    except Exception as e:
+                        logger.error(f"Erro enviando stdin: {e}")
+
+            # Iniciar thread de stdin se necessário
+            if stdin_input:
+                stdin_thread = threading.Thread(target=send_stdin)
+                stdin_thread.daemon = True
+                stdin_thread.start()
+
+            # Ler output
+            with open('output.log', 'a', encoding='utf-8') as log_file:
+                try:
+                    for chunk in socket:
+                        if chunk:
+                            decoded_chunk = chunk.decode('utf-8', errors='ignore')
+
+                            # Exibir em tempo real
+                            print(decoded_chunk + "\n", end='', flush=True)
+
+                            # Salvar no arquivo
+                            log_file.write(decoded_chunk)
+                            log_file.flush()
+
+                            # Coletar para retorno
+                            full_output.append(decoded_chunk)
+                except Exception as e:
+                    logger.error(f"Erro lendo output: {e}")
+                finally:
+                    socket.close()
+
+            # Obter exit code
+            exec_info = self.docker_client.api.exec_inspect(exec_id['Id'])
+            exit_code = exec_info['ExitCode']
+            complete_output = ''.join(full_output)
+
+            logger.info(f"Comando executado. Exit code: {exit_code}")
+
+            return {
+                'exit_code': exit_code,
+                'output': complete_output,
+                'command': command
+            }
+
+        except Exception as e:
+            logger.error(f"Erro executando comando interativo '{command}': {e}")
+            return None
+
     async def execute_command(self, command: str):
         """Executa um comando no container e retorna a saída"""
         if not self.container or not self.running:
@@ -149,24 +234,43 @@ class IsolatedSubprocessManager:
             logger.info(f"Executando comando: {command}")
 
             # Usar exec_run para executar comando e capturar saída
-            result = self.container.exec_run(
+            exec_result = self.container.exec_run(
                 command,
                 stdout=True,
                 stderr=True,
-                tty=False,  # Importante: TTY=False para capturar saída corretamente
+                stream=True,
+                tty=False,
                 workdir="/workspace"
             )
 
-            # Decodificar saída
-            output = result.output.decode('utf-8', errors='ignore')
-            exit_code = result.exit_code
+            full_output = []
+
+            # Abrir arquivo uma vez para melhor performance
+            with open('output.log', 'a', encoding='utf-8') as log_file:
+                i = 0;
+                for chunk in exec_result.output:
+                    if chunk:
+                        decoded_chunk = chunk.decode('utf-8', errors='ignore')
+
+                        # Exibir em tempo real
+                        print(i + 1)
+                        print(decoded_chunk, end='', flush=True)
+
+                        # Salvar no arquivo
+                        log_file.write(decoded_chunk)
+                        log_file.flush()  # Garantir que seja escrito imediatamente
+
+                        # Coletar para retorno
+                        full_output.append(decoded_chunk)
+
+            exit_code = exec_result.exit_code
+            complete_output = ''.join(full_output)
 
             logger.info(f"Comando executado. Exit code: {exit_code}")
-            logger.info(f"Saída: {output}")
 
             return {
                 'exit_code': exit_code,
-                'output': output,
+                'output': complete_output,
                 'command': command
             }
 
@@ -237,6 +341,48 @@ def general_cleanup():
     except Exception as e:
         logger.error(f"Erro no cleanup geral: {e}")
 
+# async def main():
+#     try:
+#         client = docker.from_env()
+#         client.ping()
+
+#         images = client.images.list()
+#         logger.info(f"Imagens Docker disponíveis: {[img.tags for img in images if img.tags]}")
+
+#         client.containers.prune()
+#         logger.info("Docker está funcionando corretamente")
+#     except Exception as e:
+#         logger.error(f"Erro verificando Docker: {e}")
+#         return
+
+#     sp = IsolatedSubprocessManager("user_03", "gcc:latest")
+#     try:
+#         # Iniciar container
+#         success = await sp.start_container()
+#         if not success:
+#             logger.error("Falha ao iniciar container")
+#             return
+
+#         # Aguardar um pouco para o container estabilizar
+#         await asyncio.sleep(2)
+
+#         # Lista de comandos para testar
+#         test_command = "/workspace/programs/ps"
+
+#         # Executar comandos
+#         logger.info("=== Iniciando execução de comandos ===")
+#         await sp.execute_command(test_command)
+
+#         # Manter container rodando por um tempo para monitoramento
+#         logger.info("Monitorando container por 10 segundos...")
+#         await asyncio.sleep(10)
+
+#     except Exception as e:
+#         logger.error(f"Erro durante execução: {e}")
+#     finally:
+#         await sp.cleanup()
+
+
 async def main():
     try:
         client = docker.from_env()
@@ -262,29 +408,17 @@ async def main():
         # Aguardar um pouco para o container estabilizar
         await asyncio.sleep(2)
 
-        # Lista de comandos para testar
-        test_commands = [
-            # "pwd",
-            # "ls -la /workspace",
-            "ls /workspace/programs",
-            # "cat /workspace/programs/test.c",
-            # "gcc --version",
-            # "gcc /workspace/programs/test.c -o /workspace/programs/test",
-            # "./workspace/programs/test"
-            "/workspace/programs/script"
-        ]
+        # Teste comando sem stdin
+        logger.info("=== Testando comando simples ===")
+        # await sp.execute_command("ls -la /workspace")
 
-        # Executar comandos
-        logger.info("=== Iniciando execução de comandos ===")
-        for cmd in test_commands:
-            result = await sp.execute_command(cmd)
-            if result:
-                print(f"\n>>> {cmd}")
-                print(f"Exit Code: {result['exit_code']}")
-                print(f"Output:\n{result['output']}")
-                print("-" * 50)
-            else:
-                print(f"Falha ao executar: {cmd}")
+        # Teste comando com stdin
+        logger.info("=== Testando comando com stdin ===")
+        # Exemplo: programa que lê entrada do usuário
+        await sp.execute_command_interactive(
+            "/workspace/programs/ts",
+            stdin_input="Davi_Moreira\n"
+        )
 
         # Manter container rodando por um tempo para monitoramento
         logger.info("Monitorando container por 10 segundos...")
@@ -294,6 +428,7 @@ async def main():
         logger.error(f"Erro durante execução: {e}")
     finally:
         await sp.cleanup()
+
 
 if __name__ == "__main__":
     try:

@@ -1,0 +1,36 @@
+2025-06-19 23:31:38,861 - __main__ - INFO - === Iniciando Servidor WebSocket ===
+2025-06-19 23:31:38,960 - __main__ - INFO - Docker está funcionando corretamente
+2025-06-19 23:31:39,054 - __main__ - INFO - Imagens Docker disponíveis: [['backend-web:latest'], ['my-app:latest', 'react-frontend:latest'], ['postgres:latest'], ['postgres:16'], ['gcc:latest'], ['ubuntu:20.04']]
+2025-06-19 23:31:39,054 - __main__ - INFO - Serviço inicializado - Imagem: meu-c-program:isolated, Max concurrent: 20
+2025-06-19 23:31:39,054 - __main__ - INFO - Iniciando servidor WebSocket em 0.0.0.0:8765
+2025-06-19 23:31:39,076 - websockets.server - INFO - server listening on 127.0.0.1:8765
+2025-06-19 23:31:39,077 - __main__ - INFO - Servidor WebSocket iniciado com sucesso!
+2025-06-19 23:31:39,077 - __main__ - INFO - Pressione Ctrl+C para parar o servidor
+2025-06-19 23:32:10,729 - websockets.server - INFO - connection open
+2025-06-19 23:32:10,729 - __main__ - INFO - Nova conexão de 127.0.0.1
+2025-06-19 23:32:10,730 - __main__ - INFO - Gerando sessão 51e51906-47ea-4d30-8e86-b4be56f65df3 para cliente 127.0.0.1
+2025-06-19 23:32:10,742 - __main__ - INFO - Conectado ao Docker com sucesso
+2025-06-19 23:32:10,743 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:32:10,743 - __main__ - WARNING - Diretório ./test não encontrado
+2025-06-19 23:32:10,744 - __main__ - INFO - Programa de teste criado
+2025-06-19 23:32:10,746 - __main__ - WARNING - Imagem meu-c-program:isolated não encontrada, usando ubuntu:20.04
+2025-06-19 23:32:10,747 - __main__ - INFO - Iniciando contêiner para usuário 51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:32:10,969 - __main__ - INFO - Contêiner iniciado com sucesso: e3e9e1c1c13cffac1e4a65deea3fec0eca1dac61d3192d001b25d44c6fa5d8de com o nome executor-51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:32:10,969 - __main__ - INFO - Cliente 51e51906-47ea-4d30-8e86-b4be56f65df3 conectado com sucesso
+2025-06-19 23:32:11,977 - __main__ - ERROR - Erro monitorando contêiner 51e51906-47ea-4d30-8e86-b4be56f65df3: 404 Client Error for http+docker://localhost/v1.50/containers/e3e9e1c1c13cffac1e4a65deea3fec0eca1dac61d3192d001b25d44c6fa5d8de/json: Not Found ("No such container: e3e9e1c1c13cffac1e4a65deea3fec0eca1dac61d3192d001b25d44c6fa5d8de")
+2025-06-19 23:32:35,546 - __main__ - INFO - Mensagem recebida de 51e51906-47ea-4d30-8e86-b4be56f65df3: ...
+2025-06-19 23:32:35,546 - __main__ - ERROR - Erro decodificando JSON: Expecting value: line 1 column 1 (char 0)
+2025-06-19 23:32:48,637 - __main__ - INFO - Mensagem recebida de 51e51906-47ea-4d30-8e86-b4be56f65df3: {
+    "teste": "sadasd"
+}...
+2025-06-19 23:32:52,259 - __main__ - INFO - Mensagem recebida de 51e51906-47ea-4d30-8e86-b4be56f65df3: {
+    "teste": "sadasd"
+}...
+2025-06-19 23:33:35,391 - websockets.server - INFO - server closing
+2025-06-19 23:33:35,396 - __main__ - INFO - Iniciando cleanup para 51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:33:35,396 - __main__ - INFO - CONTAINER STATUS running
+2025-06-19 23:33:35,401 - __main__ - ERROR - Erro parando contêiner 51e51906-47ea-4d30-8e86-b4be56f65df3: 404 Client Error for http+docker://localhost/v1.50/containers/e3e9e1c1c13cffac1e4a65deea3fec0eca1dac61d3192d001b25d44c6fa5d8de/stop?t=5: Not Found ("No such container: e3e9e1c1c13cffac1e4a65deea3fec0eca1dac61d3192d001b25d44c6fa5d8de")
+2025-06-19 23:33:35,402 - __main__ - INFO - Workspace removido: 51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:33:35,402 - __main__ - INFO - Cleanup concluído para 51e51906-47ea-4d30-8e86-b4be56f65df3
+2025-06-19 23:33:35,404 - websockets.server - INFO - server closed
+2025-06-19 23:33:35,405 - __main__ - INFO - Servidor interrompido pelo usuário
