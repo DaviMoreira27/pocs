@@ -1,7 +1,6 @@
 import asyncio
-import threading
 from docker.models.containers import ContainerCollection
-from typing import List, Optional
+from typing import List, Optional, Callable
 import websockets
 import docker
 from docker import errors as docker_errors
@@ -12,6 +11,9 @@ from pathlib import Path
 import logging
 import uuid
 import sys
+import threading
+import queue
+from concurrent.futures import ThreadPoolExecutor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,6 +25,177 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+class InteractiveProcess:
+    """Gerencia um processo interativo com stdin/stdout em tempo real"""
+
+    def __init__(self, container, docker_client, command, workdir="/workspace"):
+        self.container = container
+        self.docker_client = docker_client
+        self.command = command
+        self.workdir = workdir
+        self.exec_id = None
+        self.socket = None
+        self.running = False
+        self.stdin_queue = asyncio.Queue()
+        self.output_callbacks = []
+        self._executor = ThreadPoolExecutor(max_workers=2)
+
+    async def start(self):
+        """Inicia o processo interativo"""
+        try:
+            # Criar exec com stdin habilitado
+            self.exec_id = self.docker_client.api.exec_create(
+                self.container.id,
+                self.command,
+                stdout=True,
+                stderr=True,
+                stdin=True,
+                tty=False,
+                workdir=self.workdir
+            )
+
+            # Iniciar exec e obter socket
+            self.socket = self.docker_client.api.exec_start(
+                self.exec_id['Id'],
+                detach=False,
+                tty=False,
+                stream=True,
+                socket=True
+            )
+
+            self.running = True
+
+            # Iniciar tasks para gerenciar stdin e stdout
+            asyncio.create_task(self._handle_stdin())
+            asyncio.create_task(self._handle_stdout())
+
+            logger.info(f"Processo interativo iniciado: {self.command}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Erro iniciando processo interativo: {e}")
+            return False
+
+    async def _handle_stdin(self):
+        """Gerencia envio de dados para stdin do processo"""
+        try:
+            while self.running and self.socket:
+                try:
+                    # Aguardar dados na queue com timeout
+                    data = await asyncio.wait_for(self.stdin_queue.get(), timeout=1.0)
+                    if data is None:  # Sinal para parar
+                        break
+
+                    # Enviar dados para stdin em thread separada
+                    await asyncio.get_event_loop().run_in_executor(
+                        self._executor,
+                        self._send_to_stdin,
+                        data
+                    )
+
+                except asyncio.TimeoutError:
+                    continue
+                except Exception as e:
+                    logger.error(f"Erro enviando stdin: {e}")
+                    break
+
+        except Exception as e:
+            logger.error(f"Erro no handler de stdin: {e}")
+
+    def _send_to_stdin(self, data):
+        """Envia dados para stdin (executa em thread separada)"""
+        try:
+            if self.socket and self.socket._sock:
+                self.socket._sock.send(data.encode('utf-8'))
+        except Exception as e:
+            logger.error(f"Erro enviando dados para stdin: {e}")
+
+    async def _handle_stdout(self):
+        """Gerencia leitura de stdout/stderr do processo"""
+        try:
+            def read_output():
+                """Lê output em thread separada"""
+
+                output_chunks = []
+                if (not self.socket):
+                    raise Exception("Socket not defined")
+
+                try:
+                    for chunk in self.socket:
+                        if chunk:
+                            output_chunks.append(chunk)
+                        if not self.running:
+                            break
+                except Exception as e:
+                    logger.error(f"Erro lendo output: {e}")
+                return output_chunks
+
+            # Executar leitura em thread separada
+            chunks = await asyncio.get_event_loop().run_in_executor(
+                self._executor,
+                read_output
+            )
+
+            # Processar chunks recebidos
+            with open('output.log', 'a', encoding='utf-8') as log_file:
+                for chunk in chunks:
+                    if chunk:
+                        decoded_chunk = chunk.decode('utf-8', errors='ignore')
+
+                        # Exibir em tempo real
+                        print(decoded_chunk, end='', flush=True)
+
+                        # Salvar no arquivo
+                        log_file.write(decoded_chunk)
+                        log_file.flush()
+
+                        # Chamar callbacks registrados
+                        for callback in self.output_callbacks:
+                            try:
+                                await callback(decoded_chunk)
+                            except Exception as e:
+                                logger.error(f"Erro no callback de output: {e}")
+
+        except Exception as e:
+            logger.error(f"Erro no handler de stdout: {e}")
+        finally:
+            self.running = False
+
+    async def send_input(self, data: str):
+        """Envia dados para stdin do processo"""
+        if self.running:
+            await self.stdin_queue.put(data)
+        else:
+            logger.warning("Tentativa de enviar input para processo não ativo")
+
+    def add_output_callback(self, callback: Callable):
+        """Adiciona callback para ser chamado quando houver output"""
+        self.output_callbacks.append(callback)
+
+    async def stop(self):
+        """Para o processo"""
+        self.running = False
+        await self.stdin_queue.put(None)  # Sinal para parar stdin handler
+
+        if self.socket:
+            try:
+                self.socket.close()
+            except:
+                pass
+
+        # Aguardar threads terminarem
+        self._executor.shutdown(wait=True)
+
+    def get_exit_code(self):
+        """Obtém o código de saída do processo"""
+        if self.exec_id:
+            try:
+                exec_info = self.docker_client.api.exec_inspect(self.exec_id['Id'])
+                return exec_info.get('ExitCode')
+            except:
+                return None
+        return None
+
 class IsolatedSubprocessManager:
 
     def __init__(self, user_id: str, docker_image: str):
@@ -32,14 +205,7 @@ class IsolatedSubprocessManager:
         self.docker_client = None
         self.running = False
         self.user_workspace = None
-
-        # Tentar conectar ao Docker
-        try:
-            self.docker_client = docker.from_env()
-            logger.info("Conectado ao Docker com sucesso")
-        except Exception as e:
-            logger.error(f"Erro conectando ao Docker: {e}")
-            raise
+        self.active_processes = {}  # Dicionário para processos ativos
 
     async def create_user_workspace(self):
         """Cria workspace isolado para o usuário"""
@@ -54,13 +220,12 @@ class IsolatedSubprocessManager:
                 logger.info("Arquivos copiados para workspace")
             else:
                 logger.warning(f"Diretório ./test não encontrado")
-                # Criar um arquivo de teste se não existir
                 (self.user_workspace / "programs").mkdir(exist_ok=True)
                 test_file = self.user_workspace / "programs" / "test.c"
                 test_file.write_text('#include <stdio.h>\nint main() {\n    printf("Hello World!\\n");\n    return 0;\n}')
                 logger.info("Arquivo test.c criado automaticamente")
 
-            os.chmod(self.user_workspace, 0o755)  # Mudança: permissões mais permissivas
+            os.chmod(self.user_workspace, 0o755)
 
         except Exception as e:
             logger.error(f"Erro criando workspace: {e}")
@@ -68,7 +233,8 @@ class IsolatedSubprocessManager:
 
     async def start_container(self):
         if (self.docker_client == None):
-            raise Exception("Error starting docker client")
+            self.docker_client = docker.from_env()
+
         try:
             await self.create_user_workspace()
 
@@ -79,16 +245,11 @@ class IsolatedSubprocessManager:
                 logger.warning(f"Imagem {self.docker_image} não encontrada, usando ubuntu:20.04")
                 self.docker_image = "ubuntu:20.04"
 
-            # Configurações de segurança mais permissivas para testes
-            security_opts = [
-                "no-new-privileges:true",
-            ]
-
+            security_opts = ["no-new-privileges:true"]
             mem_limit = "1024m"
             cpu_quota = 50000
             cpu_period = 100000
 
-            # Volumes isolados
             volumes = {
                 str(self.user_workspace): {
                     'bind': '/workspace',
@@ -96,7 +257,6 @@ class IsolatedSubprocessManager:
                 }
             }
 
-            # Variáveis de ambiente isoladas
             environment = {
                 'USER_ID': self.user_id,
                 'HOME': '/workspace',
@@ -107,7 +267,7 @@ class IsolatedSubprocessManager:
 
             self.container = self.docker_client.containers.run(
                 self.docker_image,
-                command=["/bin/bash", "-c", "while true; do sleep 1; done"],  # Comando para manter container vivo
+                command=["/bin/bash", "-c", "while true; do sleep 1; done"],
                 detach=True,
                 stdin_open=True,
                 tty=True,
@@ -119,10 +279,10 @@ class IsolatedSubprocessManager:
                 cpu_period=cpu_period,
                 security_opt=security_opts,
                 network_disabled=True,
-                read_only=False,  # Mudança: permitir escrita
+                read_only=False,
                 user="root",
                 cap_drop=["ALL"],
-                cap_add=["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"],  # Capabilities mínimas necessárias
+                cap_add=["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"],
                 tmpfs={
                     '/tmp': 'size=100m',
                     '/var/tmp': 'size=100m'
@@ -132,7 +292,6 @@ class IsolatedSubprocessManager:
 
             self.running = True
             logger.info(f"Contêiner iniciado com sucesso: {self.container.id}")
-
             return True
 
         except Exception as e:
@@ -140,92 +299,70 @@ class IsolatedSubprocessManager:
             await self.cleanup()
             return False
 
-    async def execute_command_interactive(self, command: str, stdin_input: Optional[str] = None):
-        """Executa comando com suporte a stdin usando attach"""
-        if not self.container or not self.running or not self.docker_client:
+    async def start_interactive_process(self, process_id: str, command: str, output_callback=None):
+        """Inicia um processo interativo"""
+        if not self.container or not self.running:
             logger.error("Container não está rodando")
-            return None
+            return False
+
+        if process_id in self.active_processes:
+            logger.warning(f"Processo {process_id} já está ativo")
+            return False
 
         try:
-            logger.info(f"Executando comando interativo: {command}")
-
-            # Criar exec com stdin habilitado
-            exec_id = self.docker_client.api.exec_create(
-                self.container.id,
-                command,
-                stdout=True,
-                stderr=True,
-                stdin=True,
-                tty=False,
-                workdir="/workspace"
+            process = InteractiveProcess(
+                self.container,
+                self.docker_client,
+                command
             )
 
-            # Iniciar exec e obter socket
-            socket = self.docker_client.api.exec_start(
-                exec_id['Id'],
-                detach=False,
-                tty=False,
-                stream=True,
-                socket=True
-            )
+            if output_callback:
+                process.add_output_callback(output_callback)
 
-            full_output = []
-
-            # Thread para enviar stdin se fornecido
-            def send_stdin():
-                if stdin_input:
-                    try:
-                        socket._sock.send(stdin_input.encode('utf-8'))
-                        socket._sock.shutdown(1)  # Fechar stdin
-                    except Exception as e:
-                        logger.error(f"Erro enviando stdin: {e}")
-
-            # Iniciar thread de stdin se necessário
-            if stdin_input:
-                stdin_thread = threading.Thread(target=send_stdin)
-                stdin_thread.daemon = True
-                stdin_thread.start()
-
-            # Ler output
-            with open('output.log', 'a', encoding='utf-8') as log_file:
-                try:
-                    for chunk in socket:
-                        if chunk:
-                            decoded_chunk = chunk.decode('utf-8', errors='ignore')
-
-                            # Exibir em tempo real
-                            print(decoded_chunk + "\n", end='', flush=True)
-
-                            # Salvar no arquivo
-                            log_file.write(decoded_chunk)
-                            log_file.flush()
-
-                            # Coletar para retorno
-                            full_output.append(decoded_chunk)
-                except Exception as e:
-                    logger.error(f"Erro lendo output: {e}")
-                finally:
-                    socket.close()
-
-            # Obter exit code
-            exec_info = self.docker_client.api.exec_inspect(exec_id['Id'])
-            exit_code = exec_info['ExitCode']
-            complete_output = ''.join(full_output)
-
-            logger.info(f"Comando executado. Exit code: {exit_code}")
-
-            return {
-                'exit_code': exit_code,
-                'output': complete_output,
-                'command': command
-            }
+            success = await process.start()
+            if success:
+                self.active_processes[process_id] = process
+                logger.info(f"Processo interativo {process_id} iniciado: {command}")
+                return True
+            else:
+                logger.error(f"Falha ao iniciar processo {process_id}")
+                return False
 
         except Exception as e:
-            logger.error(f"Erro executando comando interativo '{command}': {e}")
-            return None
+            logger.error(f"Erro iniciando processo interativo {process_id}: {e}")
+            return False
+
+    async def send_input_to_process(self, process_id: str, data: str):
+        """Envia dados para stdin de um processo específico"""
+        if process_id not in self.active_processes:
+            logger.warning(f"Processo {process_id} não encontrado")
+            return False
+
+        try:
+            await self.active_processes[process_id].send_input(data)
+            return True
+        except Exception as e:
+            logger.error(f"Erro enviando input para processo {process_id}: {e}")
+            return False
+
+    async def stop_process(self, process_id: str):
+        """Para um processo específico"""
+        if process_id not in self.active_processes:
+            logger.warning(f"Processo {process_id} não encontrado")
+            return False
+
+        try:
+            process = self.active_processes[process_id]
+            await process.stop()
+            del self.active_processes[process_id]
+            logger.info(f"Processo {process_id} parado")
+            return True
+        except Exception as e:
+            logger.error(f"Erro parando processo {process_id}: {e}")
+            return False
 
     async def execute_command(self, command: str):
-        """Executa um comando no container e retorna a saída"""
+        """Executa comando simples (não interativo)"""
         if not self.container or not self.running:
             logger.error("Container não está rodando")
             return None
@@ -233,7 +370,6 @@ class IsolatedSubprocessManager:
         try:
             logger.info(f"Executando comando: {command}")
 
-            # Usar exec_run para executar comando e capturar saída
             exec_result = self.container.exec_run(
                 command,
                 stdout=True,
@@ -244,23 +380,13 @@ class IsolatedSubprocessManager:
             )
 
             full_output = []
-
-            # Abrir arquivo uma vez para melhor performance
             with open('output.log', 'a', encoding='utf-8') as log_file:
-                i = 0;
                 for chunk in exec_result.output:
                     if chunk:
                         decoded_chunk = chunk.decode('utf-8', errors='ignore')
-
-                        # Exibir em tempo real
-                        print(i + 1)
                         print(decoded_chunk, end='', flush=True)
-
-                        # Salvar no arquivo
                         log_file.write(decoded_chunk)
-                        log_file.flush()  # Garantir que seja escrito imediatamente
-
-                        # Coletar para retorno
+                        log_file.flush()
                         full_output.append(decoded_chunk)
 
             exit_code = exec_result.exit_code
@@ -278,36 +404,14 @@ class IsolatedSubprocessManager:
             logger.error(f"Erro executando comando '{command}': {e}")
             return None
 
-    async def execute_interactive_session(self, commands: List[str]):
-        """Executa uma sessão interativa com múltiplos comandos"""
-        results = []
-
-        for cmd in commands:
-            result = await self.execute_command(cmd)
-            if result:
-                results.append(result)
-            await asyncio.sleep(0.1)  # Pequena pausa entre comandos
-
-        return results
-
-    async def _monitor_container(self):
-        """Monitora o status do container"""
-        try:
-            while self.running and self.container:
-                self.container.reload()
-                if self.container.status != 'running':
-                    logger.info(f"Contêiner {self.user_id} parou: {self.container.status}")
-                    self.running = False
-                    break
-                await asyncio.sleep(1)
-        except Exception as e:
-            logger.error(f"Erro monitorando contêiner {self.user_id}: {e}")
-            self.running = False
-
     async def cleanup(self):
         """Remove contêiner e workspace"""
         logger.info(f"Iniciando cleanup para {self.user_id}")
         self.running = False
+
+        # Parar todos os processos ativos
+        for process_id in list(self.active_processes.keys()):
+            await self.stop_process(process_id)
 
         if self.container:
             try:
@@ -325,6 +429,102 @@ class IsolatedSubprocessManager:
             except Exception as e:
                 logger.error(f"Erro removendo workspace {self.user_id}: {e}")
 
+# Exemplo de uso com WebSocket
+async def websocket_handler(websocket, path):
+    """Handler para WebSocket que gerencia processos interativos"""
+    sp = IsolatedSubprocessManager("websocket_user", "gcc:latest")
+
+    async def output_callback(data):
+        """Callback para enviar output via WebSocket"""
+        try:
+            await websocket.send(json.dumps({
+                'type': 'output',
+                'data': data
+            }))
+        except Exception as e:
+            logger.error(f"Erro enviando output via WebSocket: {e}")
+
+    try:
+        # Iniciar container
+        success = await sp.start_container()
+        if not success:
+            await websocket.send(json.dumps({
+                'type': 'error',
+                'message': 'Falha ao iniciar container'
+            }))
+            return
+
+        await websocket.send(json.dumps({
+            'type': 'ready',
+            'message': 'Container pronto'
+        }))
+
+        # Loop principal do WebSocket
+        async for message in websocket:
+            try:
+                data = json.loads(message)
+                msg_type = data.get('type')
+
+                if msg_type == 'start_process':
+                    process_id = data.get('process_id')
+                    command = data.get('command')
+                    success = await sp.start_interactive_process(process_id, command, output_callback)
+
+                    await websocket.send(json.dumps({
+                        'type': 'process_started' if success else 'error',
+                        'process_id': process_id,
+                        'success': success
+                    }))
+
+                elif msg_type == 'send_input':
+                    process_id = data.get('process_id')
+                    input_data = data.get('data')
+                    success = await sp.send_input_to_process(process_id, input_data)
+
+                    if not success:
+                        await websocket.send(json.dumps({
+                            'type': 'error',
+                            'message': f'Falha ao enviar input para processo {process_id}'
+                        }))
+
+                elif msg_type == 'stop_process':
+                    process_id = data.get('process_id')
+                    success = await sp.stop_process(process_id)
+
+                    await websocket.send(json.dumps({
+                        'type': 'process_stopped',
+                        'process_id': process_id,
+                        'success': success
+                    }))
+
+                elif msg_type == 'execute_command':
+                    command = data.get('command')
+                    result = await sp.execute_command(command)
+
+                    await websocket.send(json.dumps({
+                        'type': 'command_result',
+                        'result': result
+                    }))
+
+            except json.JSONDecodeError:
+                await websocket.send(json.dumps({
+                    'type': 'error',
+                    'message': 'Formato JSON inválido'
+                }))
+            except Exception as e:
+                logger.error(f"Erro processando mensagem WebSocket: {e}")
+                await websocket.send(json.dumps({
+                    'type': 'error',
+                    'message': str(e)
+                }))
+
+    except websockets.exceptions.ConnectionClosed:
+        logger.info("Conexão WebSocket fechada")
+    except Exception as e:
+        logger.error(f"Erro no handler WebSocket: {e}")
+    finally:
+        await sp.cleanup()
+
 def general_cleanup():
     try:
         client = docker.from_env()
@@ -341,63 +541,10 @@ def general_cleanup():
     except Exception as e:
         logger.error(f"Erro no cleanup geral: {e}")
 
-# async def main():
-#     try:
-#         client = docker.from_env()
-#         client.ping()
-
-#         images = client.images.list()
-#         logger.info(f"Imagens Docker disponíveis: {[img.tags for img in images if img.tags]}")
-
-#         client.containers.prune()
-#         logger.info("Docker está funcionando corretamente")
-#     except Exception as e:
-#         logger.error(f"Erro verificando Docker: {e}")
-#         return
-
-#     sp = IsolatedSubprocessManager("user_03", "gcc:latest")
-#     try:
-#         # Iniciar container
-#         success = await sp.start_container()
-#         if not success:
-#             logger.error("Falha ao iniciar container")
-#             return
-
-#         # Aguardar um pouco para o container estabilizar
-#         await asyncio.sleep(2)
-
-#         # Lista de comandos para testar
-#         test_command = "/workspace/programs/ps"
-
-#         # Executar comandos
-#         logger.info("=== Iniciando execução de comandos ===")
-#         await sp.execute_command(test_command)
-
-#         # Manter container rodando por um tempo para monitoramento
-#         logger.info("Monitorando container por 10 segundos...")
-#         await asyncio.sleep(10)
-
-#     except Exception as e:
-#         logger.error(f"Erro durante execução: {e}")
-#     finally:
-#         await sp.cleanup()
-
-
 async def main():
-    try:
-        client = docker.from_env()
-        client.ping()
-
-        images = client.images.list()
-        logger.info(f"Imagens Docker disponíveis: {[img.tags for img in images if img.tags]}")
-
-        client.containers.prune()
-        logger.info("Docker está funcionando corretamente")
-    except Exception as e:
-        logger.error(f"Erro verificando Docker: {e}")
-        return
-
+    """Exemplo de uso local para testes"""
     sp = IsolatedSubprocessManager("user_03", "gcc:latest")
+
     try:
         # Iniciar container
         success = await sp.start_container()
@@ -405,33 +552,44 @@ async def main():
             logger.error("Falha ao iniciar container")
             return
 
-        # Aguardar um pouco para o container estabilizar
         await asyncio.sleep(2)
 
-        # Teste comando sem stdin
-        logger.info("=== Testando comando simples ===")
-        # await sp.execute_command("ls -la /workspace")
+        # Callback para capturar output
+        async def print_output(data):
+            print(f"[OUTPUT]: {data}", end='')
 
-        # Teste comando com stdin
-        logger.info("=== Testando comando com stdin ===")
-        # Exemplo: programa que lê entrada do usuário
-        await sp.execute_command_interactive(
-            "/workspace/programs/ts",
-            stdin_input="Davi_Moreira\n"
-        )
+        # Iniciar processo interativo
+        success = await sp.start_interactive_process("test_proc", "python3 -u -c 'import sys; print(\"Digite algo:\"); linha = input(); print(f\"Você digitou: {linha}\")'", output_callback=print_output)
 
-        # Manter container rodando por um tempo para monitoramento
-        logger.info("Monitorando container por 10 segundos...")
-        await asyncio.sleep(10)
+        if success:
+            # Simular entrada do usuário após 3 segundos
+            await asyncio.sleep(30)
+            await sp.send_input_to_process("test_proc", "Hello World!\n")
+
+            # Aguardar mais um pouco
+            await asyncio.sleep(5)
+
+            # Parar processo
+            await sp.stop_process("test_proc")
 
     except Exception as e:
         logger.error(f"Erro durante execução: {e}")
     finally:
         await sp.cleanup()
 
-
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     finally:
         general_cleanup()
+
+
+###
+#
+#  type: tipo do comando a ser enviado - 'start_process' | 'stop_process' | 'send_input' | 'cleanup'
+#
+#   process_id: o script que recebera o comando
+#   command: o comando em si
+#
+#
+#

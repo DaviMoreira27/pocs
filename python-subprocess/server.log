@@ -586,3 +586,15 @@ drwxr-xr-x. 2 1000  972 140 Jun 20 02:53 programs
 2025-06-20 00:23:01,349 - __main__ - INFO - Contêiner parado: user_03
 2025-06-20 00:23:01,350 - __main__ - INFO - Workspace removido: user_03
 2025-06-20 00:23:01,371 - __main__ - INFO - Cleanup de containers concluído
+2025-06-20 00:31:54,354 - __main__ - INFO - Workspace criado: /tmp/user_workspaces/user_03
+2025-06-20 00:31:54,355 - __main__ - INFO - Arquivos copiados para workspace
+2025-06-20 00:31:54,359 - __main__ - INFO - Imagem Docker encontrada: gcc:latest
+2025-06-20 00:31:54,359 - __main__ - INFO - Iniciando contêiner para usuário user_03
+2025-06-20 00:31:54,527 - __main__ - INFO - Contêiner iniciado com sucesso: f4397ca1d28a3d7b40a37e489dbc5d44a944db49f9fb00ceb7b6536ab415ae60
+2025-06-20 00:31:56,537 - __main__ - INFO - Processo interativo iniciado: python3 -u -c 'import sys; print("Digite algo:"); linha = input(); print(f"Você digitou: {linha}")'
+2025-06-20 00:31:56,538 - __main__ - INFO - Processo interativo test_proc iniciado: python3 -u -c 'import sys; print("Digite algo:"); linha = input(); print(f"Você digitou: {linha}")'
+2025-06-20 00:32:04,544 - __main__ - INFO - Processo test_proc parado
+2025-06-20 00:32:04,545 - __main__ - INFO - Iniciando cleanup para user_03
+2025-06-20 00:32:09,639 - __main__ - INFO - Contêiner parado: user_03
+2025-06-20 00:32:09,640 - __main__ - INFO - Workspace removido: user_03
+2025-06-20 00:32:09,656 - __main__ - INFO - Cleanup de containers concluído
